@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blood-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blood-backend
+  template:
+    metadata:
+      labels:
+        app: blood-backend
+    spec:
+      containers:
+        - name: blood-backend
+          image: vsharanya/blood-backend:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: MONGO_URL
+              value: mongodb://admin:qwerty@mongo:27017/blood_management?authSource=admin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blood-backend
+spec:
+  selector:
+    app: blood-backend
+  ports:
+    - port: 5000
+      targetPort: 5000
+  type: ClusterIP

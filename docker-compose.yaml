@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  # 🧠 Backend (Node + Express)
+  backend:
+    build: ./backend
+    container_name: blood-backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URL=mongodb://admin:qwerty@mongodb:27017/blood_management?authSource=admin
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+    networks:
+      - blood-network
+
+  # 💻 Frontend (React)
+  frontend:
+    build: ./frontend
+    container_name: blood-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://blood-backend:5000
+    networks:
+      - blood-network
+
+  # 🍃 MongoDB
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=qwerty
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - blood-network
+
+# 🗂 Persistent volume for MongoDB data
+volumes:
+  mongo-data:
+
+# 🌐 Shared network for all containers
+networks:
+  blood-network:
+    driver: bridge

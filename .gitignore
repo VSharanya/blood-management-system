@@ -1,0 +1,4 @@
+minikube/
+docker-data/
+mongo-data/
+*.log
