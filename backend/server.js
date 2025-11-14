@@ -34,6 +34,12 @@ app.use('/api', notificationRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api', feedbackRoutes);
 
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", client.register.contentType);
+  res.end(await client.register.metrics());
+});
+
+
 
 
 // ✅ Listen on port 5000 and bind to 0.0.0.0 for Docker
