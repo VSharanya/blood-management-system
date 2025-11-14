@@ -28,16 +28,11 @@ jobs:
       working-directory: ./backend
       run: npm install
 
-    # 4️⃣ Build Frontend
+    # 4️⃣ Build Frontend (❗Only one step)
     - name: Build Frontend
       working-directory: ./frontend
       env:
         NODE_OPTIONS: --openssl-legacy-provider
-      run: npm run build
-
-
-    - name: Build Frontend
-      working-directory: ./frontend
       run: npm run build
 
     # 5️⃣ Login to Docker Hub
@@ -61,10 +56,3 @@ jobs:
 
     - name: Push Frontend Image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/blood-frontend:latest
-
-    # 9️⃣ (Optional) Deploy to Kubernetes
-    # Uncomment if you have a cluster
-    # - name: Deploy to Minikube
-    #   run: |
-    #     kubectl rollout restart deployment/blood-backend
-    #     kubectl rollout restart deployment/blood-frontend
