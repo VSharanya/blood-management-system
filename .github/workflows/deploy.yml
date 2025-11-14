@@ -59,23 +59,4 @@ jobs:
     - name: Push Frontend Image
       run: docker push ${{ secrets.DOCKER_USERNAME }}/blood-frontend:latest
 
-    # 🔟 Setup kubectl
-    - name: Set up Kubeconfig
-      run: |
-        mkdir -p $HOME/.kube
-        echo "${{ secrets.KUBE_CONFIG_DATA }}" | base64 --decode > $HOME/.kube/config
-
-    - name: Verify Kubernetes Access
-      run: kubectl get nodes
-
-    # 1️⃣1️⃣ Deploy Backend
-    - name: Deploy Backend to Kubernetes
-      run: |
-        kubectl set image deployment/blood-backend blood-backend=${{ secrets.DOCKER_USERNAME }}/blood-backend:latest
-        kubectl rollout status deployment/blood-backend
-
-    # 1️⃣2️⃣ Deploy Frontend
-    - name: Deploy Frontend to Kubernetes
-      run: |
-        kubectl set image deployment/blood-frontend blood-frontend=${{ secrets.DOCKER_USERNAME }}/blood-frontend:latest
-        kubectl rollout status deployment/blood-frontend
+    
